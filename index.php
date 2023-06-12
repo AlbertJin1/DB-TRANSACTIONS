@@ -9,6 +9,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Retrieve data from the "employees" table
+$sql = "SELECT * FROM employees";
+$result = $conn->query($sql);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $employeeNo = $_POST['employeeNo'];
     $name = $_POST['name'];
@@ -34,9 +38,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+    // Redirect to the same page
+    // header("Location: " . $_SERVER['PHP_SELF']);
+    // exit();
 }
 
-function computeSSS($grossPay) {
+// RETRIEVE INFO
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the retrieve button is clicked
+    if (isset($_POST['updateRetrieveBtn'])) {
+        $employeeNo = $_POST['updateEmployeeNo'];
+
+        // Retrieve the employee information from the database
+        $sql = "SELECT * FROM employees WHERE employee_no = '$employeeNo'";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $employee = $result->fetch_assoc();
+
+            // Populate the retrieved data into the respective input fields
+            $name = $employee['name'];
+            $address = $employee['address'];
+            $age = $employee['age'];
+            $rate = $employee['rate_hour'];
+            $hoursWorked = $employee['hours_worked'];
+            $grossPay = $employee['gross_pay'];
+            $sssContributions = $employee['sss_contributions'];
+            $philhealth = $employee['philhealth'];
+            $pagIbig = $employee['pag_ibig'];
+            $cashAdvance = $employee['cash_advance'];
+            $totalDeductions = $employee['total_deductions'];
+            $netPay = $employee['net_pay'];
+
+            // Echo the values to be retrieved by JavaScript
+            echo json_encode(array(
+                'name' => $name,
+                'address' => $address,
+                'age' => $age,
+                'rate' => $rate,
+                'hoursWorked' => $hoursWorked,
+                'grossPay' => $grossPay,
+                'sssContributions' => $sssContributions,
+                'philhealth' => $philhealth,
+                'pagIbig' => $pagIbig,
+                'cashAdvance' => $cashAdvance,
+                'totalDeductions' => $totalDeductions,
+                'netPay' => $netPay
+            ));
+            exit();
+        } else {
+            echo json_encode(array('error' => 'Employee not found'));
+            exit();
+        }
+    }
+}
+
+// REMOVE AN EMPLOYEE
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the form is submitted for removing an employee
+    if (isset($_POST['removeEmployeeNo'])) {
+        $removeEmployeeNo = $_POST['removeEmployeeNo'];
+
+        // Remove the employee from the database
+        $sql = "DELETE FROM employees WHERE employee_no = '$removeEmployeeNo'";
+        if ($conn->query($sql) === true) {
+            echo "Employee removed successfully!";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+}
+
+function computeSSS($grossPay)
+{
     if ($grossPay < 4250) {
         return 180 + 10;
     } elseif ($grossPay >= 4250 && $grossPay < 4750) {
@@ -147,7 +222,8 @@ function computeSSS($grossPay) {
 }
 
 // Function to compute PAGIBIG contribution based on gross pay
-function computePAGIBIG($grossPay) {
+function computePAGIBIG($grossPay)
+{
     if ($grossPay < 1000) {
         return 0.00;
     } elseif ($grossPay >= 1000 && $grossPay < 1500) {
@@ -160,7 +236,8 @@ function computePAGIBIG($grossPay) {
 }
 
 // Function to compute Philhealth contribution based on gross pay
-function computePhilhealth($grossPay) {
+function computePhilhealth($grossPay)
+{
     return $grossPay * 0.045;
 }
 ?>
@@ -188,19 +265,45 @@ function computePhilhealth($grossPay) {
 
             <div class="employee-list">
                 <table>
-                    <th>Employee No.</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Age</th>
-                    <th>Rate/Hour</th>
-                    <th>No. of Hrs Worked</th>
-                    <th>Gross Pay</th>
-                    <th>SSS Contributions</th>
-                    <th>Philheath</th>
-                    <th>Pag ibig</th>
-                    <th>Cash Advance</th>
-                    <th>Total Deductions</th>
-                    <th>Net Pay</th>
+                    <tr>
+                        <th>Employee No.</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Age</th>
+                        <th>Rate/Hour</th>
+                        <th>No. of Hrs Worked</th>
+                        <th>Gross Pay</th>
+                        <th>SSS Contributions</th>
+                        <th>Philheath</th>
+                        <th>Pag ibig</th>
+                        <th>Cash Advance</th>
+                        <th>Total Deductions</th>
+                        <th>Net Pay</th>
+                    </tr>
+                    <?php
+                    // Loop through the database results and generate table rows
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row['employee_no'] . "</td>";
+                            echo "<td>" . $row['name'] . "</td>";
+                            echo "<td>" . $row['address'] . "</td>";
+                            echo "<td>" . $row['age'] . "</td>";
+                            echo "<td>" . $row['rate_hour'] . "</td>";
+                            echo "<td>" . $row['hours_worked'] . "</td>";
+                            echo "<td>" . $row['gross_pay'] . "</td>";
+                            echo "<td>" . $row['sss_contributions'] . "</td>";
+                            echo "<td>" . $row['philhealth'] . "</td>";
+                            echo "<td>" . $row['pag_ibig'] . "</td>";
+                            echo "<td>" . $row['cash_advance'] . "</td>";
+                            echo "<td>" . $row['total_deductions'] . "</td>";
+                            echo "<td>" . $row['net_pay'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='13'><center>No employees found</center></td></tr>";
+                    }
+                    ?>
                 </table>
             </div>
 
@@ -260,13 +363,64 @@ function computePhilhealth($grossPay) {
 
         <div class="update-employee-section">
             <h2>Update Employee</h2>
-            <!-- Add the input fields and other content for updating an employee -->
-            <!-- You can use a <form> element for the inputs and handle the submission using JavaScript -->
+            <form>
+                <label for="updateEmployeeNo">Employee No.</label>
+                <input type="text" id="updateEmployeeNo" required>
+
+                <label for="updateName">Name</label>
+                <input type="text" id="updateName" required>
+
+                <label for="updateAddress">Address</label>
+                <input type="text" id="updateAddress" required>
+
+                <label for="updateAge">Age</label>
+                <input type="number" id="updateAge" required>
+
+                <label for="updateRate">Rate/Hour</label>
+                <input type="number" id="updateRate" required>
+
+                <label for="updateHoursWorked">No. of Hrs Worked</label>
+                <input type="number" id="updateHoursWorked" required>
+
+                <label for="updateGrossPay">Gross Pay</label>
+                <input type="text" id="updateGrossPay" readonly>
+
+                <label for="updateSSSContributions">SSS Contributions</label>
+                <input type="number" id="updateSSSContributions" readonly>
+
+                <label for="updatePhilhealth">Philhealth</label>
+                <input type="number" id="updatePhilhealth" readonly>
+
+                <label for="updatePagIbig">Pag ibig</label>
+                <input type="number" id="updatePagIbig" readonly>
+
+                <label for="updateCashAdvance">Cash Advance</label>
+                <input type="number" id="updateCashAdvance" required>
+
+                <label for="updateTotalDeductions">Total Deductions</label>
+                <input type="text" id="updateTotalDeductions" readonly>
+
+                <label for="updateNetPay">Net Pay</label>
+                <input type="text" id="updateNetPay" readonly>
+
+                <div class="buttons">
+                    <button type="button" id="updateCalculateBtn">CALCULATE</button>
+                    <button type="button" id="updateRetrieveBtn">RETRIEVE</button>
+                    <button type="submit" id="updateSaveBtn">SAVE</button>
+                    <button type="reset" id="updateClearBtn">CLEAR</button>
+                </div>
+            </form>
         </div>
+
         <div class="remove-employee-section">
             <h2>Delete Employee</h2>
-            <!-- Add the input fields and other content for updating an employee -->
-            <!-- You can use a <form> element for the inputs and handle the submission using JavaScript -->
+            <form id="removeEmployeeForm" method="post">
+                <label for="removeEmployeeNo">Employee No.</label>
+                <input type="text" id="removeEmployeeNo" name="removeEmployeeNo" required>
+                <div class="buttons">
+                    <button type="submit" id="removeEmployeeBtn">REMOVE</button>
+                </div>
+            </form>
         </div>
     </section>
 
