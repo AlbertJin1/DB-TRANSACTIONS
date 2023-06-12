@@ -42,7 +42,8 @@ section {
 }
 
 /* START */
-.container h1 {
+h1,
+h2 {
     font-size: 60px;
     font-weight: 500;
     color: var(white);
@@ -101,7 +102,6 @@ td {
     margin-bottom: 35px;
     display: flex;
     justify-content: center;
-    /* Align buttons horizontally */
 }
 
 .buttons button {
@@ -117,9 +117,59 @@ td {
     padding: 20px 0;
 }
 
-/* ADD FORM */
+/* FORM */
+h2 {
+    font-size: 60px;
+    font-weight: 500;
+    color: var(white);
+    line-height: 1.2;
+    text-align: center;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: 'Bebas Neue', sans-serif;
+}
 
-/* Add responsive styles for smaller screens */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 75%;
+    padding: 5px;
+}
+
+.buttons {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button {
+    margin: 0 5px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 @media (max-width: 600px) {
     table {
         font-size: 12px;
@@ -127,11 +177,9 @@ td {
 
     .buttons {
         flex-wrap: wrap;
-        /* Wrap buttons on smaller screens */
     }
 
     .buttons button {
         flex: 0 0 100%;
-        /* Take full width on smaller screens */
     }
 }
