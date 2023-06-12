@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+/* font-family: 'Roboto', sans-serif; */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+/* font-family: 'Bebas Neue', sans-serif; */
+
+/* ALL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 50px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background: #ECF4FD;
+    color: white;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #6692C0;
+}
+
+body {
+    background-color: #BFD7F0;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    padding: 50px 5rem 35px 5rem;
+    margin-bottom: -1px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* START */
+.container h1 {
+    font-size: 60px;
+    font-weight: 500;
+    color: var(white);
+    line-height: 1.2;
+    text-align: center;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.employee-list {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.employee-list table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    font-size: 11px;
+}
+
+th {
+    background-color: #6692C0;
+    color: white;
+    font-size: 15px;
+}
+
+td {
+    background-color: #ECF4FD;
+    color: black;
+}
+
+.employee-list th {
+    text-transform: uppercase;
+}
+
+/* BUTTONS */
+.buttons {
+    margin-bottom: 35px;
+    display: flex;
+    justify-content: center;
+    /* Align buttons horizontally */
+}
+
+.buttons button {
+    margin: 0 50px 0 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.add-employee-section,
+.update-employee-section,
+.remove-employee-section {
+    display: none;
+    padding: 20px 0;
+}
+
+/* ADD FORM */
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 600px) {
+    table {
+        font-size: 12px;
+    }
+
+    .buttons {
+        flex-wrap: wrap;
+        /* Wrap buttons on smaller screens */
+    }
+
+    .buttons button {
+        flex: 0 0 100%;
+        /* Take full width on smaller screens */
+    }
+}
