@@ -75,10 +75,6 @@ h2 {
     margin-right: auto;
 }
 
-.selected-row {
-    background-color: red;
-}
-
 th,
 td {
     border: 1px solid black;

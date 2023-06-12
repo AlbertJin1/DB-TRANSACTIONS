@@ -9,39 +9,56 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Retrieve data from the "employees" table
+// READ EMPLOYEES TABLE
 $sql = "SELECT * FROM employees";
 $result = $conn->query($sql);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $employeeNo = $_POST['employeeNo'];
-    $name = $_POST['name'];
-    $address = $_POST['address'];
-    $age = $_POST['age'];
-    $rate = $_POST['rate'];
-    $hoursWorked = $_POST['hoursWorked'];
+    // CHECK ADD EMPLOYEE
+    if (isset($_POST['employeeNo'], $_POST['name'], $_POST['address'], $_POST['age'], $_POST['rate'], $_POST['hoursWorked'], $_POST['cashAdvance'])) {
+        $employeeNo = $_POST['employeeNo'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $age = $_POST['age'];
+        $rate = $_POST['rate'];
+        $hoursWorked = $_POST['hoursWorked'];
+        $cashAdvance = $_POST['cashAdvance'];
 
-    // Perform calculations
-    $grossPay = $rate * $hoursWorked;
-    $sssContributions = computeSSS($grossPay);
-    $philhealth = computePhilhealth($grossPay);
-    $pagIbig = computePAGIBIG($grossPay);
-    $cashAdvance = $_POST['cashAdvance'];
-    $totalDeductions = $sssContributions + $philhealth + $pagIbig + $cashAdvance;
-    $netPay = $grossPay - $totalDeductions;
+        // CALCU
+        $grossPay = $rate * $hoursWorked;
+        $sssContributions = computeSSS($grossPay);
+        $philhealth = computePhilhealth($grossPay);
+        $pagIbig = computePAGIBIG($grossPay);
+        $cashAdvance = $_POST['cashAdvance'];
+        $totalDeductions = $sssContributions + $philhealth + $pagIbig + $cashAdvance;
+        $netPay = $grossPay - $totalDeductions;
 
-    // Save to database
-    $sql = "INSERT INTO employees (employee_no, name, address, age, rate_hour, hours_worked, gross_pay, sss_contributions, philhealth, pag_ibig, cash_advance, total_deductions, net_pay)
-            VALUES ('$employeeNo', '$name', '$address', '$age', '$rate', '$hoursWorked', '$grossPay', '$sssContributions', '$philhealth', '$pagIbig', '$cashAdvance', '$totalDeductions', '$netPay')";
-    if ($conn->query($sql) === true) {
-        echo "Employee saved successfully!";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        // SAVE TO DATABASE
+        $sql = "INSERT INTO employees (employee_no, name, address, age, rate_hour, hours_worked, gross_pay, sss_contributions, philhealth, pag_ibig, cash_advance, total_deductions, net_pay)
+                VALUES ('$employeeNo', '$name', '$address', '$age', '$rate', '$hoursWorked', '$grossPay', '$sssContributions', '$philhealth', '$pagIbig', '$cashAdvance', '$totalDeductions', '$netPay')";
+        if ($conn->query($sql) === true) {
+            echo "Employee saved successfully!";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
     }
 
-    // Redirect to the same page
-    // header("Location: " . $_SERVER['PHP_SELF']);
-    // exit();
+    // CHECK REMOVE EMPLOYEE
+    if (isset($_POST['removeEmployeeNo'])) {
+        $removeEmployeeNo = $_POST['removeEmployeeNo'];
+
+        // REMOVE FROM DATABASE
+        $sql = "DELETE FROM employees WHERE employee_no = '$removeEmployeeNo'";
+        if ($conn->query($sql) === true) {
+            echo "Employee removed successfully!";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+
+    // REDIRECT TO SAME PAGE
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
 
 // RETRIEVE INFO
@@ -50,14 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['updateRetrieveBtn'])) {
         $employeeNo = $_POST['updateEmployeeNo'];
 
-        // Retrieve the employee information from the database
+        // RETRIEVE INFO FROM DATABASe
         $sql = "SELECT * FROM employees WHERE employee_no = '$employeeNo'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $employee = $result->fetch_assoc();
 
-            // Populate the retrieved data into the respective input fields
+            // POPULATE ENTRY FIELD FROM RETRIEVED INFO
             $name = $employee['name'];
             $address = $employee['address'];
             $age = $employee['age'];
@@ -71,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $totalDeductions = $employee['total_deductions'];
             $netPay = $employee['net_pay'];
 
-            // Echo the values to be retrieved by JavaScript
+            // ECHO VALUES FROM JSCRIPT
             echo json_encode(array(
                 'name' => $name,
                 'address' => $address,
@@ -95,21 +112,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // REMOVE AN EMPLOYEE
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if the form is submitted for removing an employee
-    if (isset($_POST['removeEmployeeNo'])) {
-        $removeEmployeeNo = $_POST['removeEmployeeNo'];
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     if (isset($_POST['removeEmployeeNo'])) {
+//         $removeEmployeeNo = $_POST['removeEmployeeNo'];
 
-        // Remove the employee from the database
-        $sql = "DELETE FROM employees WHERE employee_no = '$removeEmployeeNo'";
-        if ($conn->query($sql) === true) {
-            echo "Employee removed successfully!";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-    }
-}
+//         // Remove the employee from the database
+//         $sql = "DELETE FROM employees WHERE employee_no = '$removeEmployeeNo'";
+//         if ($conn->query($sql) === true) {
+//             echo "Employee removed successfully!";
+//         } else {
+//             echo "Error: " . $sql . "<br>" . $conn->error;
+//         }
+//     }
+// }
 
+// COMPUTE
 function computeSSS($grossPay)
 {
     if ($grossPay < 4250) {
@@ -221,7 +238,6 @@ function computeSSS($grossPay)
     }
 }
 
-// Function to compute PAGIBIG contribution based on gross pay
 function computePAGIBIG($grossPay)
 {
     if ($grossPay < 1000) {
@@ -235,7 +251,6 @@ function computePAGIBIG($grossPay)
     }
 }
 
-// Function to compute Philhealth contribution based on gross pay
 function computePhilhealth($grossPay)
 {
     return $grossPay * 0.045;

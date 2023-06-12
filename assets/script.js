@@ -238,28 +238,20 @@ document.getElementById("clearBtn").addEventListener("click", function () {
     document.getElementById("netPay").value = "";
 });
 
-// Update Retrieve button click event
+// RETRIEVE BUTTON
 document.getElementById('updateRetrieveBtn').addEventListener('click', function () {
-    // Get the employee number input value
     var employeeNo = document.getElementById('updateEmployeeNo').value;
 
-    // Create an XMLHttpRequest object
     var xhr = new XMLHttpRequest();
 
-    // Prepare the request
     xhr.open('GET', 'get_employee.php?employeeNo=' + employeeNo, true);
 
-    // Set the response type to JSON
     xhr.responseType = 'json';
 
-    // Define the onload event handler
     xhr.onload = function () {
-        // Check if the request was successful
         if (xhr.status === 200) {
-            // Retrieve the employee data from the response
             var employeeData = xhr.response;
 
-            // Update the form fields with the retrieved data
             document.getElementById('updateName').value = employeeData.name;
             document.getElementById('updateAddress').value = employeeData.address;
             document.getElementById('updateAge').value = employeeData.age;
@@ -273,18 +265,15 @@ document.getElementById('updateRetrieveBtn').addEventListener('click', function 
             document.getElementById('updateTotalDeductions').value = employeeData.total_deductions;
             document.getElementById('updateNetPay').value = employeeData.net_pay;
         } else {
-            // Display an error message
             console.log('Error: ' + xhr.status);
         }
     };
 
-    // Send the request
     xhr.send();
 });
 
-// Update Save button click event
+// UPDATE SAVE BUTTON
 document.getElementById('updateSaveBtn').addEventListener('click', function () {
-    // Get the form and form fields
     var form = document.getElementById('updateEmployeeForm');
     var employeeNo = document.getElementById('updateEmployeeNo').value;
     var name = document.getElementById('updateName').value;
@@ -300,28 +289,20 @@ document.getElementById('updateSaveBtn').addEventListener('click', function () {
     var totalDeductions = document.getElementById('updateTotalDeductions').value;
     var netPay = document.getElementById('updateNetPay').value;
 
-    // Create an XMLHttpRequest object
     var xhr = new XMLHttpRequest();
 
-    // Prepare the request
     xhr.open('POST', 'update_employee.php', true);
 
-    // Set the request header
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    // Define the onload event handler
     xhr.onload = function () {
-        // Check if the request was successful
         if (xhr.status === 200) {
-            // Display a success message
             console.log('Employee updated successfully!');
         } else {
-            // Display an error message
             console.log('Error: ' + xhr.status);
         }
     };
 
-    // Create the request body
     var requestBody = 'employeeNo=' + encodeURIComponent(employeeNo) +
         '&name=' + encodeURIComponent(name) +
         '&address=' + encodeURIComponent(address) +
@@ -336,6 +317,5 @@ document.getElementById('updateSaveBtn').addEventListener('click', function () {
         '&totalDeductions=' + encodeURIComponent(totalDeductions) +
         '&netPay=' + encodeURIComponent(netPay);
 
-    // Send the request
     xhr.send(requestBody);
 });
