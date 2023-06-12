@@ -1,0 +1,15 @@
+CREATE TABLE employees (
+    employee_no INT PRIMARY KEY UNIQUE,
+    name VARCHAR(255),
+    address VARCHAR(255),
+    age INT,
+    rate_hour DECIMAL(10, 2),
+    hours_worked DECIMAL(10, 2),
+    gross_pay DECIMAL(10, 2),
+    sss_contributions DECIMAL(10, 2),
+    philhealth DECIMAL(10, 2),
+    pag_ibig DECIMAL(10, 2),
+    cash_advance DECIMAL(10, 2),
+    total_deductions DECIMAL(10, 2),
+    net_pay DECIMAL(10, 2)
+);
