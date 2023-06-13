@@ -4,6 +4,7 @@ $username = 'root';
 $password = '';
 $database = 'payroll';
 
+
 $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -268,12 +269,12 @@ function computePhilhealth($grossPay)
     <title>Payroll System | REGUALOS | TAN | YASAY</title>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
 
-    <link rel="icon" href="/img/AMBATU.png" type="image/x-icon">
-
+    <link rel="icon" href="./img/AMBATU.png" type="image/x-icon">
 
 </head>
 
 <body>
+
     <section class="main">
         <div class="container">
             <h1>Payroll System</h1>
