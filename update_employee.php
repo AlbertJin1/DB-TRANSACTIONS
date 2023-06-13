@@ -14,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $address = $_POST['address'];
     $age = $_POST['age'];
-    $rate = $_POST['rate'];
-    $hoursWorked = $_POST['hoursWorked'];
+    $rate = strval($_POST['rate']);
+    $hoursWorked = strval($_POST['hoursWorked']);
     $grossPay = $_POST['grossPay'];
     $sssContributions = $_POST['sssContributions'];
     $philhealth = $_POST['philhealth'];
     $pagIbig = $_POST['pagIbig'];
-    $cashAdvance = $_POST['cashAdvance'];
+    $cashAdvance = strval($_POST['cashAdvance']);
     $totalDeductions = $_POST['totalDeductions'];
     $netPay = $_POST['netPay'];
 

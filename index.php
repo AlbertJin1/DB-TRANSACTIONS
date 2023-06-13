@@ -21,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = $_POST['name'];
         $address = $_POST['address'];
         $age = $_POST['age'];
-        $rate = $_POST['rate'];
-        $hoursWorked = $_POST['hoursWorked'];
-        $cashAdvance = $_POST['cashAdvance'];
+        $rate = floatval($_POST['rate']);
+        $hoursWorked = floatval($_POST['hoursWorked']);
+        $cashAdvance = floatval($_POST['cashAdvance']);
 
         // CALCU
         $grossPay = $rate * $hoursWorked;
@@ -357,10 +357,10 @@ function computePhilhealth($grossPay)
                 <input type="number" id="age" name="age" required>
 
                 <label for="rate">Rate/Hour</label>
-                <input type="number" id="rate" name="rate" required>
+                <input type="text" id="rate" name="rate" required>
 
                 <label for="hoursWorked">No. of Hrs Worked</label>
-                <input type="number" id="hoursWorked" name="hoursWorked" required>
+                <input type="text" id="hoursWorked" name="hoursWorked" required>
 
                 <label for="grossPay">Gross Pay</label>
                 <input type="text" id="grossPay" readonly>
@@ -375,7 +375,7 @@ function computePhilhealth($grossPay)
                 <input type="number" id="pagIbig" name="pagIbig" readonly>
 
                 <label for="cashAdvance">Cash Advance</label>
-                <input type="number" id="cashAdvance" name="cashAdvance" required>
+                <input type="text" id="cashAdvance" name="cashAdvance" required>
 
                 <label for="totalDeductions">Total Deductions</label>
                 <input type="text" id="totalDeductions" readonly>
@@ -411,10 +411,10 @@ function computePhilhealth($grossPay)
                 <input type="number" id="updateAge" required>
 
                 <label for="updateRate">Rate/Hour</label>
-                <input type="number" id="updateRate" required>
+                <input type="text" id="updateRate" required>
 
                 <label for="updateHoursWorked">No. of Hrs Worked</label>
-                <input type="number" id="updateHoursWorked" required>
+                <input type="text" id="updateHoursWorked" required>
 
                 <label for="updateGrossPay">Gross Pay</label>
                 <input type="text" id="updateGrossPay" readonly>
@@ -429,7 +429,7 @@ function computePhilhealth($grossPay)
                 <input type="number" id="updatePagIbig" readonly>
 
                 <label for="updateCashAdvance">Cash Advance</label>
-                <input type="number" id="updateCashAdvance" required>
+                <input type="text" id="updateCashAdvance" required>
 
                 <label for="updateTotalDeductions">Total Deductions</label>
                 <input type="text" id="updateTotalDeductions" readonly>
