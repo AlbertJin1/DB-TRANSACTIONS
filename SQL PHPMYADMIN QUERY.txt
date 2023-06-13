@@ -1,3 +1,6 @@
+CREATE DATABASE payroll;
+USE payroll;
+
 CREATE TABLE employees (
     employee_no INT PRIMARY KEY UNIQUE,
     name VARCHAR(255),
