@@ -37,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "INSERT INTO employees (employee_no, name, address, age, rate_hour, hours_worked, gross_pay, sss_contributions, philhealth, pag_ibig, cash_advance, total_deductions, net_pay)
                 VALUES ('$employeeNo', '$name', '$address', '$age', '$rate', '$hoursWorked', '$grossPay', '$sssContributions', '$philhealth', '$pagIbig', '$cashAdvance', '$totalDeductions', '$netPay')";
         if ($conn->query($sql) === true) {
-            echo "Employee saved successfully!";
+            $error[] = 'EMPLOYEE SAVED SUCCESSFULLY!';
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            $error[] = 'WE ENCOUNTERED AN ERROR :<';
         }
     }
 
@@ -50,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // REMOVE FROM DATABASE
         $sql = "DELETE FROM employees WHERE employee_no = '$removeEmployeeNo'";
         if ($conn->query($sql) === true) {
-            echo "Employee removed successfully!";
+            $error[] = 'EMPLOYEE REMOVED SUCCESSFULLY!';
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            $error[] = 'WE ENCOUNTERED AN ERROR :<';
         }
     }
 
@@ -261,8 +261,15 @@ function computePhilhealth($grossPay)
 <html>
 
 <head>
-    <title>Payroll System</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll System | REGUALOS | TAN | YASAY</title>
     <link rel="stylesheet" type="text/css" href="assets/style.css">
+
+    <link rel="icon" href="/img/AMBATU.png" type="image/x-icon">
+
 
 </head>
 
@@ -321,6 +328,13 @@ function computePhilhealth($grossPay)
                     ?>
                 </table>
             </div>
+            <?php
+            if (isset($error)) {
+                foreach ($error as $error) {
+                    echo '<span class="error-msg">' . $error . '</span>';
+                }
+            }
+            ?>
 
         </div>
     </section>
@@ -382,6 +396,10 @@ function computePhilhealth($grossPay)
                 <label for="updateEmployeeNo">Employee No.</label>
                 <input type="text" id="updateEmployeeNo" required>
 
+                <div class="buttons">
+                    <button type="button" id="updateRetrieveBtn">RETRIEVE</button>
+                </div>
+
                 <label for="updateName">Name</label>
                 <input type="text" id="updateName" required>
 
@@ -420,7 +438,6 @@ function computePhilhealth($grossPay)
 
                 <div class="buttons">
                     <button type="button" id="updateCalculateBtn">CALCULATE</button>
-                    <button type="button" id="updateRetrieveBtn">RETRIEVE</button>
                     <button type="submit" id="updateSaveBtn">SAVE</button>
                     <button type="reset" id="updateClearBtn">CLEAR</button>
                 </div>
